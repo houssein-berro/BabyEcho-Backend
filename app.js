@@ -32,6 +32,6 @@ mongoose
     app.use('/api/users', userRoutes);
     app.use('/api/recordings', recordingRoutes);
     app.use('/api/devices', deviceRoutes);
-
+ 
   })
   .catch(err => console.error('Failed to connect to MongoDB:', err));
