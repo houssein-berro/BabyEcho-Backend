@@ -1,5 +1,5 @@
 import express from 'express';
-import { getDevices, getDeviceById, createDevice} from '../controllers/device.controller.js';
+import { getDevices, getDeviceById, createDevice, updateDevice } from '../controllers/device.controller.js';
 
 const router = express.Router();
 
@@ -7,6 +7,6 @@ const router = express.Router();
 router.get('/', getDevices);
 router.get('/:id', getDeviceById);
 router.post('/', createDevice);
-
+router.put('/:id', updateDevice);
 
 export default router;
