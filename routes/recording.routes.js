@@ -3,7 +3,6 @@ import { getRecordings, getRecordingById, createRecording, updateRecording, dele
 
 const router = express.Router();
 
-// Recording routes
 router.get('/', getRecordings);
 router.get('/:id', getRecordingById);
 router.post('/', createRecording);
