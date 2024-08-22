@@ -3,7 +3,6 @@ import { getDevices, getDeviceById, createDevice, updateDevice, deleteDevice } f
 
 const router = express.Router();
 
-// Device routes
 router.get('/', getDevices);
 router.get('/:id', getDeviceById);
 router.post('/', createDevice);
