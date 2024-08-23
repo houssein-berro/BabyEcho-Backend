@@ -31,3 +31,19 @@ export const getDevicesByUser = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
+
+// Get a single device by ID
+export const getDeviceById = async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const device = await Device.findById(id);
+        if (!device) {
+            return res.status(404).json({ message: 'Device not found' });
+        }
+        res.json(device);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
