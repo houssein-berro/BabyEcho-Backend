@@ -1,6 +1,7 @@
 import Recording from '../models/recording.model.js';
 import User from '../models/user.model.js';
 
+// Create recording
 export const createRecording = async (req, res) => {
   const { userId, babyId, duration, recordingURL } = req.body;
 
@@ -28,3 +29,13 @@ export const createRecording = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+// Get all recordings
+export const getRecordings = async (req, res) => {
+    try {
+      const recordings = await Recording.find();
+      res.json(recordings);
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  };
