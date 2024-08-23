@@ -20,3 +20,14 @@ export const addDevice = async (req, res) => {
     }
 };
 
+// Get all devices for a user
+export const getDevicesByUser = async (req, res) => {
+    const { userId } = req.params;
+
+    try {
+        const devices = await Device.find({ userId });
+        res.status(200).json(devices);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
