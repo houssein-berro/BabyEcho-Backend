@@ -47,7 +47,7 @@ export const getRecordingById = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const recording = await Recording.findById(id);
+    const recording = await Recording.findById({ userId: id });
     if (!recording) {
       return res.status(404).json({ message: "Recording not found" });
     }
@@ -62,9 +62,11 @@ export const updateRecording = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const recording = await Recording.findByIdAndUpdate(id, req.body, { new: true });
+    const recording = await Recording.findByIdAndUpdate(id, req.body, {
+      new: true,
+    });
     if (!recording) {
-      return res.status(404).json({ message: 'Recording not found' });
+      return res.status(404).json({ message: "Recording not found" });
     }
     res.json(recording);
   } catch (error) {
@@ -79,9 +81,9 @@ export const deleteRecording = async (req, res) => {
   try {
     const recording = await Recording.findByIdAndDelete(id);
     if (!recording) {
-      return res.status(404).json({ message: 'Recording not found' });
+      return res.status(404).json({ message: "Recording not found" });
     }
-    res.status(204).json({ message: 'Recording deleted successfully' });
+    res.status(204).json({ message: "Recording deleted successfully" });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
