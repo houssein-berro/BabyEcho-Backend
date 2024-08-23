@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import analysisResultSchema from "./schemas/analysisResult.schema";
+import analysisResultSchema from "./schemas/analysisResult.schema.js";
 const { Schema } = mongoose;
 
 
