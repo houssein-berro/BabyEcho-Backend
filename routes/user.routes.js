@@ -10,7 +10,6 @@ import {
 
 const router = express.Router();
 
-// Basic CRUD operations
 router.get('/', getAllUsers);                
 router.get('/:id', getUserById);             
 router.put('/:id', updateUser);              
