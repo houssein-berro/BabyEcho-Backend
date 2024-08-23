@@ -47,3 +47,18 @@ export const getDeviceById = async (req, res) => {
     }
 };
 
+// Update a device
+export const updateDevice = async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const device = await Device.findByIdAndUpdate(id, req.body, { new: true });
+        if (!device) {
+            return res.status(404).json({ message: 'Device not found' });
+        }
+        res.json(device);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
