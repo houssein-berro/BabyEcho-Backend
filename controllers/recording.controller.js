@@ -56,3 +56,19 @@ export const getRecordingById = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+// Update a recording
+export const updateRecording = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const recording = await Recording.findByIdAndUpdate(id, req.body, { new: true });
+    if (!recording) {
+      return res.status(404).json({ message: 'Recording not found' });
+    }
+    res.json(recording);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
