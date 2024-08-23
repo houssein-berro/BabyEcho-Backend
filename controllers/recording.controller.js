@@ -72,3 +72,17 @@ export const updateRecording = async (req, res) => {
   }
 };
 
+// Delete a recording
+export const deleteRecording = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const recording = await Recording.findByIdAndDelete(id);
+    if (!recording) {
+      return res.status(404).json({ message: 'Recording not found' });
+    }
+    res.status(204).json({ message: 'Recording deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
