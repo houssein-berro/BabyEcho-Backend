@@ -57,10 +57,10 @@ export const loginUser = async (req, res) => {
   }
 };
 
-// In your backend's auth controller
+// Token Validation
 export const validateToken = async (req, res) => {
   try {
-    const user = req.user; // This should come from a middleware that validates JWT
+    const user = req.user;
     console.log(req.user)
     if (!user) {
       return res.status(401).json({ message: 'Invalid token' });
