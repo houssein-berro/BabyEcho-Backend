@@ -1,35 +1,57 @@
-import Recording from "../models/recording.model.js";
-import User from "../models/user.model.js";
+import path from 'path';
+import multer from 'multer';
+import Recording from '../models/recording.model.js';
 
-// Create recording
-export const createRecording = async (req, res) => {
-  const { userId, babyId, duration, recordingURL } = req.body;
-
-  try {
-    const user = await User.findById(userId);
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
-    }
-
-    const babyExists = user.babies._id(babyId);
-    if (!babyExists) {
-      return res
-        .status(404)
-        .json({ message: "Baby not found in user's profile" });
-    }
-
-    const newRecording = new Recording({
-      userId,
-      babyId,
-      duration,
-      recordingURL,
-    });
-
-    await newRecording.save();
-    res.status(201).json(newRecording);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
+// Set up multer storage configuration
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'uploads/'); // Set the destination to the 'uploads' folder
+  },
+  filename: function (req, file, cb) {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname));
   }
+});
+
+// Initialize multer with the storage configuration
+const upload = multer({
+  storage: storage,
+  limits: { fileSize: 10000000 } // Limit file size to 10MB (adjust as needed)
+}).single('audioFile'); // Expect a single file upload with the field name 'audioFile'
+
+export const saveRecording = (req, res) => {
+  // Handle the file upload
+  upload(req, res, async function (err) {
+    if (err instanceof multer.MulterError) {
+      // A Multer error occurred when uploading.
+      return res.status(500).send('Multer error occurred during upload.');
+    } else if (err) {
+      // An unknown error occurred when uploading.
+      return res.status(500).send('Unknown error occurred during upload.');
+    }
+
+    // No file uploaded
+    if (!req.file) {
+      return res.status(400).send('No file uploaded.');
+    }
+
+    // Proceed with saving the recording details to the database
+    try {
+      const newRecording = new Recording({
+        userId: req.body.userId, // Ensure 'userId' is provided by the client
+        babyId: req.body.babyId, // Ensure 'babyId' is provided by the client
+        recordingURL: req.file.path, // Save the path of the uploaded file
+        duration: req.body.duration // Optional: save the duration if provided
+      });
+
+      await newRecording.save();
+
+      res.status(201).send('Recording saved successfully.');
+    } catch (error) {
+      console.error('Failed to save recording:', error);
+      res.status(500).send('Error saving recording.');
+    }
+  });
 };
 
 // Get all recordings
