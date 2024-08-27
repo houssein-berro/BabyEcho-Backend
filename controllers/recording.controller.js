@@ -2,10 +2,9 @@ import path from 'path';
 import multer from 'multer';
 import Recording from '../models/recording.model.js';
 
-// Set up multer storage configuration
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, 'uploads/'); // Set the destination to the 'uploads' folder
+    cb(null, 'uploads/'); 
   },
   filename: function (req, file, cb) {
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
@@ -13,35 +12,30 @@ const storage = multer.diskStorage({
   }
 });
 
-// Initialize multer with the storage configuration
 const upload = multer({
   storage: storage,
-  limits: { fileSize: 10000000 } // Limit file size to 10MB (adjust as needed)
-}).single('audioFile'); // Expect a single file upload with the field name 'audioFile'
+  limits: { fileSize: 10000000 } 
+}).single('audioFile');
 
+// Save a recording
 export const saveRecording = (req, res) => {
-  // Handle the file upload
   upload(req, res, async function (err) {
     if (err instanceof multer.MulterError) {
-      // A Multer error occurred when uploading.
       return res.status(500).send('Multer error occurred during upload.');
     } else if (err) {
-      // An unknown error occurred when uploading.
       return res.status(500).send('Unknown error occurred during upload.');
     }
 
-    // No file uploaded
     if (!req.file) {
       return res.status(400).send('No file uploaded.');
     }
-
-    // Proceed with saving the recording details to the database
+ 
     try {
       const newRecording = new Recording({
-        userId: req.body.userId, // Ensure 'userId' is provided by the client
-        babyId: req.body.babyId, // Ensure 'babyId' is provided by the client
-        recordingURL: req.file.path, // Save the path of the uploaded file
-        duration: req.body.duration // Optional: save the duration if provided
+        userId: req.body.userId, 
+        babyId: req.body.babyId, 
+        recordingURL: req.file.path,
+        duration: req.body.duration
       });
 
       await newRecording.save();
