@@ -53,7 +53,7 @@ export const deleteUser = async (req, res) => {
 // Function to add a baby profile to a user
 export const addBabyToUser = async (req, res) => {
     const { userId } = req.params;
-    const { name, birthdate, gender, otherDetails } = req.body;
+    const { name, birthdate, gender } = req.body;
   
     try {
       const user = await User.findById(userId);
@@ -61,7 +61,7 @@ export const addBabyToUser = async (req, res) => {
         return res.status(404).json({ message: 'User not found' });
       }
   
-      const newBaby = { name, birthdate, gender, otherDetails };
+      const newBaby = { name, birthdate, gender };
       user.babies.push(newBaby);
       await user.save();
   
