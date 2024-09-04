@@ -1,7 +1,7 @@
 import express from 'express';
 import {
   getRecordings,
-  getRecordingById,
+  getRecordingByUserId,
   saveRecording,
   updateRecording,
   deleteRecording,
@@ -11,7 +11,7 @@ import {
 const router = express.Router();
 
 router.get('/', getRecordings);
-router.get('/:id', getRecordingById);
+router.get('/:id', getRecordingByUserId);
 router.put('/:id', updateRecording);
 router.put('/:id/analysis', updateRecordingAnalysis);
 router.delete('/:id', deleteRecording);
