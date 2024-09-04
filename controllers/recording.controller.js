@@ -1,10 +1,15 @@
 import path from 'path';
+import { fileURLToPath } from 'url'; // Import the fileURLToPath method
 import multer from 'multer';
 import Recording from '../models/recording.model.js';
 
+// Define __dirname in ES module scope
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, 'uploads/'); 
+    // Adjust the path as necessary
+    cb(null, path.join(__dirname, '../../uploads/')); 
   },
   filename: function (req, file, cb) {
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
@@ -29,19 +34,23 @@ export const saveRecording = (req, res) => {
     if (!req.file) {
       return res.status(400).send('No file uploaded.');
     }
- 
+
     try {
       const newRecording = new Recording({
         userId: req.body.userId, 
         babyId: req.body.babyId, 
-        recordingURL: req.file.path,
+        recordingURL: path.join('uploads', req.file.filename),
         duration: req.body.duration
       });
 
       await newRecording.save();
 
-      res.status(201).send('Recording saved successfully.');
-    } catch (error) {
+      res.status(201).json({
+        message: 'Recording saved successfully.',
+        recordingId: newRecording._id,
+        recordingURL: req.file.path,
+      });
+      } catch (error) {
       console.error('Failed to save recording:', error);
       res.status(500).send('Error saving recording.');
     }
@@ -63,7 +72,7 @@ export const getRecordingById = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const recording = await Recording.findById({ userId: id });
+    const recording = await Recording.find({ userId: id });
     if (!recording) {
       return res.status(404).json({ message: "Recording not found" });
     }
@@ -104,3 +113,4 @@ export const deleteRecording = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
