@@ -55,7 +55,9 @@ export const loginUser = async (req, res) => {
     res.json({
       _id: user._id,
       email: user.email,
+      username: user.username,
       UserType: user.UserType,
+      babies: user.babies,
       token: generateToken(user)
     });
   } catch (error) {
