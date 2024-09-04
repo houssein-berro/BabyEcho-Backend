@@ -3,8 +3,7 @@ const { Schema } = mongoose;
 
 const analysisResultSchema = new Schema({
   analysisTimestamp: { type: Date, default: Date.now }, 
-  resultDetails: Schema.Types.Mixed,  
-  MLModelVersion: String
+  resultDetails: {type: String},  
 });
 
 export default analysisResultSchema;
