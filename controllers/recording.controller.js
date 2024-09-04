@@ -114,3 +114,26 @@ export const deleteRecording = async (req, res) => {
   }
 };
 
+export const updateRecordingAnalysis = async (req, res) => {
+  const { id } = req.params;
+  const { resultDetails } = req.body;
+
+  try {
+    const updatedRecording = await Recording.findByIdAndUpdate(
+      id,
+      {
+        $set: { 'analysisResults.resultDetails': resultDetails },
+      },
+      { new: true }
+    );
+
+    if (!updatedRecording) {
+      return res.status(404).json({ message: 'Recording not found' });
+    }
+
+    res.json(updatedRecording);
+  } catch (error) {
+    console.error('Error updating analysis result:', error);
+    res.status(500).json({ message: 'Error updating analysis result' });
+  }
+};
