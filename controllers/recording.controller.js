@@ -68,7 +68,7 @@ export const getRecordings = async (req, res) => {
 };
 
 // Get a single recording by ID
-export const getRecordingById = async (req, res) => {
+export const getRecordingByUserId = async (req, res) => {
   const { id } = req.params;
 
   try {
@@ -114,27 +114,3 @@ export const deleteRecording = async (req, res) => {
   }
 };
 
-export const updateRecordingAnalysis = async (req, res) => {
-  const { id } = req.params;
-  const { resultDetails } = req.body;
-
-  try {
-    // Find the recording by ID and update the analysisResults.resultDetails field
-    const updatedRecording = await Recording.findByIdAndUpdate(
-      id,
-      {
-        $set: { 'analysisResults.resultDetails': resultDetails },
-      },
-      { new: true } // Return the updated document
-    );
-
-    if (!updatedRecording) {
-      return res.status(404).json({ message: 'Recording not found' });
-    }
-
-    res.json(updatedRecording);
-  } catch (error) {
-    console.error('Error updating analysis result:', error);
-    res.status(500).json({ message: 'Error updating analysis result' });
-  }
-};
