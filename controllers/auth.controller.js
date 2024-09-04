@@ -4,32 +4,38 @@ import { generateToken } from '../utils/generateToken.js';
 
 // Register a new user
 export const registerUser = async (req, res) => {
-    const { username, email, password, type } = req.body;
-    
-    try {
-      const existingUser = await User.findOne({ email });
-      if (existingUser) {
-        return res.status(400).json({ message: "User already exists" });
-      }
-      
-      const hashedPassword = await bcrypt.hash(password, 10);
+  const { username, email, password, type } = req.body;
+  console.log({ username, email, password, type });
   
-      const newUser = new User({
-        username,
-        email,
-        passwordHash: hashedPassword,
-        type
-      });
-  
-      await newUser.save();
-      res.status(201).json({
-        newUser,
-        token: generateToken(newUser)
-      });
-    } catch (error) {
-      res.status(500).json({ message: error.message });
+  try {
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({ message: "User already exists" });
     }
-  };
+
+    // Use `let` instead of `const` for potential reassignment
+    let newType = type;
+    if (!type) newType = 'User';
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+    
+    const newUser = new User({
+      username,
+      email,
+      passwordHash: hashedPassword,
+      type: newType
+    });
+
+    await newUser.save();
+    res.status(201).json({
+      newUser,
+      token: generateToken(newUser)  // Ensure generateToken is defined
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 
 // User login
 export const loginUser = async (req, res) => {
