@@ -82,6 +82,17 @@ export const getRecordingByUserId = async (req, res) => {
   }
 };
 
+
+export const getRecordingsByBabyId = async (req, res) => {
+  try {
+    const babyId = req.params.babyId;
+    const recordings = await Recording.find({ babyId }).populate('userId', 'name'); 
+    res.json(recordings);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching recordings', error });
+  }
+};
+
 // Update a recording
 export const updateRecording = async (req, res) => {
   const { id } = req.params;
