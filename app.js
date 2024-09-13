@@ -7,6 +7,7 @@ import userRoutes from './routes/user.routes.js';
 import recordingRoutes from './routes/recording.routes.js';
 import deviceRoutes from './routes/device.routes.js';
 import authRoutes from './routes/auth.routes.js';
+import notificationRoutes from './routes/notification.routes.js';
 
 dotenv.config();
 
@@ -30,6 +31,7 @@ mongoose
     app.use('/api/recordings', recordingRoutes);
     app.use('/api/devices', deviceRoutes);
     app.use('/api/auth', authRoutes);
+    app.use('/api/notifications', notificationRoutes);
 
   })
   .catch(err => console.error('Failed to connect to MongoDB:', err));
