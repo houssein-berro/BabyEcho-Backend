@@ -5,4 +5,4 @@ const router = express.Router();
 
 router.post('/', sendNotification);
 
-export default router;
+export default router; 
