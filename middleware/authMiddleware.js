@@ -4,7 +4,7 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-export const authMiddleware = async (req, res, next) => {
+const authMiddleware = async (req, res, next) => {
   const token = req.header('Authorization')?.replace('Bearer ', '');
 
   if (!token) {
@@ -19,3 +19,6 @@ export const authMiddleware = async (req, res, next) => {
     res.status(401).json({ message: 'Token is not valid' });
   }
 };
+
+// Correct default export
+export default authMiddleware;
