@@ -11,7 +11,7 @@ const userSchema = new Schema({
   type: {
     type: String,
     required: true,
-    enum: ['Admin', 'User'],
+    enum: ['Doctor', 'User'],
     default: 'User'
   },
   createdAt: { type: Date, default: Date.now },
