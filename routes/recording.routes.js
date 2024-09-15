@@ -18,6 +18,6 @@ router.put('/:id', updateRecording);
 router.put('/:id/analysis', updateRecordingAnalysis);
 router.delete('/:id', deleteRecording);
 router.post('/', authMiddleware,saveRecording);
-router.get('/baby/:babyId',getRecordingsByBabyId);
+router.get('/baby/:babyId',authMiddleware,getRecordingsByBabyId);
 
 export default router;
